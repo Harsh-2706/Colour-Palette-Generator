@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<!-- saved from url=(0091)file:///C:/Users/harsh/OneDrive/Desktop/Harsh/Python/Projects%202025/color_palette_gen.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <title>Ultimate Color Palette Generator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="./Ultimate Color Palette Generator_files/css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #7d3cff;
+            --secondary: #51d0de;
+            --accent: #ff6b6b;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Montserrat', Arial, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        }
+        .taskbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            height: 70px;
+            background: rgba(255,255,255,0.95);
+            box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            font-weight: 700;
+            font-size: 1.7rem;
+            color: var(--primary);
+            letter-spacing: 1px;
+        }
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            box-shadow: 0 2px 6px rgba(99,102,241,0.12);
+        }
+        .base-colors-preview {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        .base-preview {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 2px solid var(--primary);
+            box-shadow: 0 1px 4px rgba(99,102,241,0.10);
+            transition: transform 0.2s;
+        }
+        .base-preview:hover {
+            transform: scale(1.1);
+        }
+        .container {
+            max-width: 1000px;
+            margin: 60px auto 40px auto;
+            background: rgba(255,255,255,0.98);
+            padding: 3rem 2.5rem;
+            border-radius: 25px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+        }
+        h1 {
+            text-align: center;
+            font-weight: 700;
+            font-size: 2.8rem;
+            letter-spacing: 2px;
+            margin-bottom: 0.5em;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-text-fill-color: white;
+        }
+        .subheader {
+            text-align: center;
+            color: #6366f1;
+            font-size: 1.2rem;
+            margin-bottom: 2.5rem;
+            line-height: 1.5;
+        }
+        .control-panel {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 3rem;
+        }
+        .color-inputs {
+            display: flex;
+            gap: 25px;
+            justify-content: center;
+        }
+        .color-input {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+        input[type="color"] {
+            width: 65px;
+            height: 65px;
+            border: 3px solid var(--primary);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.2s;
+            appearance: none;
+        }
+        input[type="color"]::-webkit-color-swatch-wrapper {
+            padding: 0;
+            border-radius: 50%;
+        }
+        input[type="color"]::-webkit-color-swatch {
+            border: none;
+            border-radius: 50%;
+        }
+        input[type="color"]:hover {
+            transform: scale(1.05);
+            box-shadow: 0 3px 12px rgba(125,60,255,0.2);
+        }
+        .color-input span {
+            margin-top: 1em;
+            font-size: 1em;
+            color: var(--primary);
+            font-weight: 500;
+        }
+        .palette-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .palette-name-row {
+            display: flex;
+            gap: 10px;
+        }
+        #paletteName {
+            flex: 1;
+            padding: 12px 18px;
+            border: 2px solid #e0e7ff;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: border 0.2s;
+        }
+        #paletteName:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+        .btn-group {
+            display: flex;
+            gap: 15px;
+        }
+        .btn {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            font-weight: 700;
+            border: none;
+            border-radius: 10px;
+            padding: 12px 25px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(125,60,255,0.25);
+        }
+        .btn svg {
+            width: 18px;
+            height: 18px;
+            fill: white;
+        }
+        .palette-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 15px;
+            margin-bottom: 2rem;
+            min-height: 150px;
+        }
+        .color-swatch {
+            height: 130px;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 15px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.2s;
+            opacity: 0;
+            animation: fadeIn 0.5s forwards;
+        }
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+        .color-swatch::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(transparent 60%, rgba(0,0,0,0.15));
+        }
+        .color-swatch span {
+            position: relative;
+            z-index: 1;
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(2px);
+            color: white;
+            font-size: 1em;
+            padding: 6px 12px;
+            border-radius: 6px;
+            margin-top: 10px;
+            letter-spacing: 0.5px;
+            user-select: all;
+        }
+        .color-swatch:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+        #notification {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary);
+            color: white;
+            padding: 14px 35px;
+            border-radius: 8px;
+            font-size: 1.1em;
+            display: none;
+            z-index: 100;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .palette-history {
+            margin-top: 3rem;
+            background: rgba(241,245,249,0.8);
+            border-radius: 15px;
+            padding: 1.5rem;
+        }
+        .history-title {
+            font-size: 1.3em;
+            color: var(--primary);
+            margin-bottom: 1em;
+            font-weight: 700;
+        }
+        .history-palettes {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+        }
+        .history-palette {
+            background: white;
+            border-radius: 12px;
+            padding: 1em;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .history-palette:hover {
+            transform: translateY(-3px);
+        }
+        .history-palette-name {
+            font-size: 1em;
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 0.8em;
+        }
+        .history-swatches {
+            display: flex;
+            gap: 6px;
+            height: 30px;
+        }
+        .history-swatch {
+            flex: 1;
+            border-radius: 6px;
+            border: 1px solid rgba(0,0,0,0.08);
+        }
+        @media (max-width: 768px) {
+            .container {
+                margin: 30px 15px;
+                padding: 2rem 1.5rem;
+            }
+            .taskbar {
+                padding: 0 1rem;
+                height: 60px;
+            }
+            h1 {
+                font-size: 2.2rem;
+            }
+            .color-inputs {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+<style type="text/css" id="operaUserStyle"></style></head>
+<body>
+    <div class="taskbar">
+        <div class="logo">
+            <div class="logo-icon">🎨</div>
+            ColorGen Pro
+        </div>
+        <div class="base-colors-preview" id="baseColorsPreview"><div class="base-preview" title="#FF6B6B" style="background: rgb(255, 107, 107);"></div><div class="base-preview" title="#7D3CFF" style="background: rgb(125, 60, 255);"></div><div class="base-preview" title="#51D0DE" style="background: rgb(81, 208, 222);"></div></div>
+    </div>
+    <div class="container">
+        <h1>Color Palette Generator</h1>
+        <div class="subheader">
+            Create professional color schemes instantly.<br>
+            Generate, name, save, export, and share beautiful palettes with one click!
+        </div>
+        
+        <div class="control-panel">
+            <div class="color-inputs">
+                <div class="color-input">
+                    <input type="color" value="#ff6b6b" class="base-color">
+                    <span>Primary</span>
+                </div>
+                <div class="color-input">
+                    <input type="color" value="#7d3cff" class="base-color">
+                    <span>Secondary</span>
+                </div>
+                <div class="color-input">
+                    <input type="color" value="#51d0de" class="base-color">
+                    <span>Accent</span>
+                </div>
+            </div>
+            <div class="palette-controls">
+                <div class="palette-name-row">
+                    <input type="text" id="paletteName" placeholder="My Awesome Palette">
+                </div>
+                <div class="btn-group">
+                    <button class="btn" id="generateBtn">
+                        <svg viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                        Generate
+                    </button>
+                    <button class="btn" id="downloadBtn">
+                        <svg viewBox="0 0 24 24"><path d="M12 16l-4-4 1.41-1.41L12 13.17l2.59-2.58L16 12m-4-6l4 4H8m10 6h2v2H4v-2h2v-7a8 8 0 018-8 8 8 0 018 8v7z"></path></svg>
+                        Export
+                    </button>
+                    <button class="btn" id="shareBtn">
+                        <svg viewBox="0 0 24 24"><path d="M18 8a3 3 0 1 0-2.83-4H8.83A3 3 0 1 0 6 8a2.99 2.99 0 0 0 2.83 2H15.17A2.99 2.99 0 0 0 18 8zm-6 10a2 2 0 1 0 4 0 2 2 0 0 0-4 0z"></path></svg>
+                        Share
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="palette-container" id="palette"><div class="color-swatch" style="background-color: rgb(209, 0, 0);"><span>#D10000</span></div><div class="color-swatch" style="background-color: rgb(255, 5, 5);"><span>#FF0505</span></div><div class="color-swatch" style="background-color: rgb(255, 56, 56);"><span>#FF3838</span></div><div class="color-swatch" style="background-color: rgb(255, 107, 107);"><span>#FF6B6B</span></div><div class="color-swatch" style="background-color: rgb(255, 158, 158);"><span>#FF9E9E</span></div><div class="color-swatch" style="background-color: rgb(255, 209, 209);"><span>#FFD1D1</span></div><div class="color-swatch" style="background-color: rgb(255, 229, 229);"><span>#FFE5E5</span></div><div class="color-swatch" style="background-color: rgb(54, 0, 162);"><span>#3600A2</span></div><div class="color-swatch" style="background-color: rgb(71, 0, 213);"><span>#4700D5</span></div><div class="color-swatch" style="background-color: rgb(91, 9, 255);"><span>#5B09FF</span></div><div class="color-swatch" style="background-color: rgb(125, 60, 255);"><span>#7D3CFF</span></div><div class="color-swatch" style="background-color: rgb(159, 111, 255);"><span>#9F6FFF</span></div><div class="color-swatch" style="background-color: rgb(193, 162, 255);"><span>#C1A2FF</span></div><div class="color-swatch" style="background-color: rgb(227, 213, 255);"><span>#E3D5FF</span></div><div class="color-swatch" style="background-color: rgb(24, 116, 126);"><span>#18747E</span></div><div class="color-swatch" style="background-color: rgb(32, 155, 169);"><span>#209BA9</span></div><div class="color-swatch" style="background-color: rgb(40, 195, 212);"><span>#28C3D4</span></div><div class="color-swatch" style="background-color: rgb(81, 208, 222);"><span>#51D0DE</span></div><div class="color-swatch" style="background-color: rgb(124, 220, 230);"><span>#7CDCE6</span></div><div class="color-swatch" style="background-color: rgb(167, 231, 238);"><span>#A7E7EE</span></div><div class="color-swatch" style="background-color: rgb(210, 243, 246);"><span>#D2F3F6</span></div></div>
+        <div id="notification">Color copied to clipboard!</div>
+
+        <div class="palette-history">
+            <div class="history-title">Recently Generated Palettes</div>
+            <div class="history-palettes" id="historyPalettes"></div>
+        </div>
+    </div>
+
+    <script>
+        const baseColors = document.querySelectorAll('.base-color');
+        const paletteContainer = document.getElementById('palette');
+        const notification = document.getElementById('notification');
+        const paletteNameInput = document.getElementById('paletteName');
+        const generateBtn = document.getElementById('generateBtn');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const shareBtn = document.getElementById('shareBtn');
+        const historyPalettesDiv = document.getElementById('historyPalettes');
+        const baseColorsPreview = document.getElementById('baseColorsPreview');
+
+        let currentPalette = [];
+        let paletteHistory = [];
+
+        // Update base color preview in taskbar
+        function updateBaseColorsPreview() {
+            baseColorsPreview.innerHTML = '';
+            baseColors.forEach(input => {
+                const swatch = document.createElement('div');
+                swatch.className = 'base-preview';
+                swatch.style.background = input.value;
+                swatch.title = input.value.toUpperCase();
+                baseColorsPreview.appendChild(swatch);
+            });
+        }
+
+        // Color conversion functions
+        function hexToHSL(hex) {
+            let r = parseInt(hex.substr(1,2),16)/255,
+                g = parseInt(hex.substr(3,2),16)/255,
+                b = parseInt(hex.substr(5,2),16)/255;
+            let max = Math.max(r,g,b), min = Math.min(r,g,b);
+            let h,s,l = (max+min)/2;
+            if(max === min) h = s = 0;
+            else {
+                let d = max - min;
+                s = l > 0.5 ? d/(2-max-min) : d/(max+min);
+                switch(max) {
+                    case r: h = (g - b)/d + (g < b ? 6 : 0); break;
+                    case g: h = (b - r)/d + 2; break;
+                    case b: h = (r - g)/d + 4; break;
+                }
+                h /= 6;
+            }
+            return { h: h*360, s: s*100, l: l*100 };
+        }
+
+        function HSLToHex(h,s,l) {
+            s /= 100; l /= 100;
+            let c = (1 - Math.abs(2*l - 1)) * s,
+                x = c * (1 - Math.abs((h/60)%2 - 1)),
+                m = l - c/2,
+                r,g,b;
+            if(0<=h&&h<60) [r,g,b]=[c,x,0];
+            else if(60<=h&&h<120) [r,g,b]=[x,c,0];
+            else if(120<=h&&h<180) [r,g,b]=[0,c,x];
+            else if(180<=h&&h<240) [r,g,b]=[0,x,c];
+            else if(240<=h&&h<300) [r,g,b]=[x,0,c];
+            else [r,g,b]=[c,0,x];
+            r = Math.round((r+m)*255).toString(16).padStart(2,'0');
+            g = Math.round((g+m)*255).toString(16).padStart(2,'0');
+            b = Math.round((b+m)*255).toString(16).padStart(2,'0');
+            return `#${r}${g}${b}`;
+        }
+
+        // Palette generation
+        function generatePalette(animated = true) {
+            paletteContainer.innerHTML = '';
+            currentPalette = [];
+            let animationDelay = 0;
+            
+            baseColors.forEach(input => {
+                const baseHex = input.value;
+                const baseHSL = hexToHSL(baseHex);
+                
+                // Generate 7 variations per base color
+                for(let i = -3; i <= 3; i++) {
+                    const newLightness = Math.min(95, Math.max(5, baseHSL.l + (i * 10)));
+                    const variation = HSLToHex(baseHSL.h, baseHSL.s, newLightness);
+                    currentPalette.push(variation);
+                    
+                    const swatch = document.createElement('div');
+                    swatch.className = 'color-swatch';
+                    swatch.style.backgroundColor = variation;
+                    swatch.innerHTML = `<span>${variation.toUpperCase()}</span>`;
+                    
+                    if(animated) {
+                        swatch.style.animationDelay = `${animationDelay * 0.05}s`;
+                        animationDelay++;
+                    }
+                    
+                    swatch.onclick = () => {
+                        navigator.clipboard.writeText(variation);
+                        notification.textContent = `Copied: ${variation.toUpperCase()}`;
+                        notification.style.display = 'block';
+                        setTimeout(() => notification.style.display = 'none', 1500);
+                    };
+                    
+                    paletteContainer.appendChild(swatch);
+                }
+            });
+        }
+
+        // Palette history
+        function savePaletteToHistory() {
+            const name = paletteNameInput.value.trim() || 'Unnamed Palette';
+            if(currentPalette.length === 0) return;
+            
+            paletteHistory.unshift({
+                name,
+                colors: [...currentPalette],
+                date: new Date().toLocaleString()
+            });
+            
+            if(paletteHistory.length > 5) paletteHistory.pop();
+            renderPaletteHistory();
+        }
+
+        function renderPaletteHistory() {
+            historyPalettesDiv.innerHTML = '';
+            paletteHistory.forEach(palette => {
+                const div = document.createElement('div');
+                div.className = 'history-palette';
+                div.innerHTML = `
+                    <div class="history-palette-name">${palette.name}</div>
+                    <div class="history-swatches">
+                        ${palette.colors.map(c => `
+                            <div class="history-swatch" style="background: ${c}" title="${c}"></div>
+                        `).join('')}
+                    </div>
+                `;
+                div.onclick = () => loadPalette(palette);
+                historyPalettesDiv.appendChild(div);
+            });
+        }
+
+        function loadPalette(palette) {
+            currentPalette = [...palette.colors];
+            paletteNameInput.value = palette.name;
+            generatePalette(true);
+        }
+
+        // Export as PNG
+        downloadBtn.onclick = () => {
+            const canvas = document.createElement('canvas');
+            const width = 1200, height = 200;
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            
+            // Draw color swatches
+            const swatchWidth = width / currentPalette.length;
+            currentPalette.forEach((color, i) => {
+                ctx.fillStyle = color;
+                ctx.fillRect(i * swatchWidth, 0, swatchWidth, height);
+            });
+            
+            // Add palette name
+            ctx.fillStyle = 'rgba(255,255,255,0.9)';
+            ctx.font = 'bold 24px Montserrat';
+            ctx.fillText(paletteNameInput.value || 'My Palette', 20, 40);
+            
+            // Create download link
+            const link = document.createElement('a');
+            link.download = `${paletteNameInput.value || 'palette'}.png`;
+            link.href = canvas.toDataURL();
+            link.click();
+        };
+
+        // Share Palette
+        shareBtn.onclick = () => {
+            const name = paletteNameInput.value.trim() || 'Unnamed Palette';
+            const hexList = currentPalette.join(', ');
+            const message = `${name}\nPalette: ${hexList}`;
+            if (navigator.share) {
+                navigator.share({
+                    title: name,
+                    text: message,
+                    url: window.location.href
+                }).catch(() => {
+                    // User cancelled or error
+                });
+            } else {
+                // Fallback: copy to clipboard
+                navigator.clipboard.writeText(message);
+                notification.textContent = "Palette copied for sharing!";
+                notification.style.display = 'block';
+                setTimeout(() => notification.style.display = 'none', 1500);
+            }
+        };
+
+        // Event listeners
+        generateBtn.addEventListener('click', () => {
+            generatePalette(true);
+            savePaletteToHistory();
+        });
+        
+        baseColors.forEach(input => {
+            input.addEventListener('input', () => {
+                generatePalette(true);
+                updateBaseColorsPreview();
+            });
+        });
+
+        // Initial setup
+        generatePalette(false);
+        updateBaseColorsPreview();
+        renderPaletteHistory();
+    </script>
+
+
+</body></html>
